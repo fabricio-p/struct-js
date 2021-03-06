@@ -77,7 +77,7 @@ export const struct = (
 		static decode(buffer: Buffer, offset = 0/*, opts: DecodeOptions*/): Struct {
 			const structArgs: BinaryCompat[] = [];
 			for(let [name, type, size] of props) {
-				size = size || sizeof[type];
+				size = size || sizeof[type] || buffer.readUInt16LE(offset);
 				structArgs.push(decoder[type](buffer, offset));
 				offset += size;
 			}

@@ -1,7 +1,8 @@
 {
   "name": "struct-js",
   "version": "0.7.0",
-  "description": "",
+  "description": "C struct simulator",
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "test": "node dist/index.js",
@@ -10,7 +11,7 @@
     "build": "tsc -p ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Fabricio Pashaj",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.0"
