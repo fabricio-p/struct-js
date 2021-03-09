@@ -1,7 +1,7 @@
 import DataType from "./data-type";
 
 type EncodeFunction<T> = (data: T, size?: number) => Buffer;
-type DecodeFunction<T> = (data: Buffer, offset: number, size?: number) => T;
+type DecodeFunction<T> = (data: Buffer, offset: number, size: number) => T;
 
 const encoder: EncodeFunction<BinaryCompat|any>[] = [];
 const decoder: DecodeFunction<BinaryCompat|any>[] = [];
@@ -57,11 +57,19 @@ encoder[DataType.f64] = (data: number) => {
 	return buffer;
 }
 encoder[DataType.string] = (data: string, size) => {
-	const bufferSize = size || data.length;
-	const buffer = Buffer.alloc(bufferSize + 1);
-	buffer[0] = bufferSize;
-	for(let i = 1; i <= bufferSize; i++)
-		buffer[i] = data.charCodeAt(i - 1);
+	let buffer: Buffer;
+	let diff: number;
+	if(!size) {
+		buffer = Buffer.alloc(2 + data.length);
+		buffer.writeUInt16LE(data.length);
+		diff = 2;
+		size = data.length + 2;
+	} else {
+		buffer = Buffer.alloc(size);
+		diff = 0;
+	}
+	for(let i = diff; i < size; i++)
+		buffer[i] = data.charCodeAt(i - diff);
 	return buffer;
 }
 encoder[DataType.buffer] = (data: Buffer) => Buffer.from([...data]);
@@ -74,13 +82,10 @@ decoder[DataType.u32] = (data, offset) => data.readUInt32LE(offset);
 decoder[DataType.i32] = (data, offset) => data.readInt32LE(offset);
 decoder[DataType.u64] = (data, offset) => data.readBigUInt64LE(offset);
 decoder[DataType.i64] = (data, offset) => data.readBigInt64LE(offset);
-decoder[DataType.f32] = (data, offset) => data.readFloatLE(offset);
+decoder[DataType.f32] = (data, offset) => Math.fround(data.readFloatLE(offset));
 decoder[DataType.f64] = (data, offset) => data.readDoubleLE(offset);
-decoder[DataType.string] = (data, offset, size) =>
-	String.fromCharCode(...data.slice(size ?
-					  offset :
-					  offset + 1,
-					offset + (size || data.readUInt16LE(offset))));
+decoder[DataType.string] = (data, offset, size: number) =>
+	String.fromCharCode(...data.slice(offset, offset + size));
 
 const sizeof: number[] = [
 	0,
@@ -90,12 +95,10 @@ const sizeof: number[] = [
 	1 << 1,
 	1 << 2,
 	1 << 2,
-        1 << 4,
-        1 << 4,
+        1 << 3,
+        1 << 3,
 	1 << 2,
-        1 << 2,
-	1 << 4,
-        1 << 4
+        1 << 3
 ]
 //for(let i = 1, o = 1; i <= 8; i++ && o += 2)
 

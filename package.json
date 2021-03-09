@@ -5,10 +5,10 @@
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
-    "test": "node dist/index.js",
-    "watch:js": "nodemon",
-    "watch:ts": "tsc -w -p .",
-    "build": "tsc -p ."
+    "test": "node dist/test.js",
+    "watch:js": "nodemon dist/test.js",
+    "watch:ts": "tsc -w -p . ; rm -rf dist/types",
+    "build": "tsc -p . ; rm -rf dist/types"
   },
   "keywords": [],
   "author": "Fabricio Pashaj",
