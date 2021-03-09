@@ -1,9 +1,9 @@
 {
   "name": "struct-js",
-  "version": "0.7.0",
+  "version": "0.7.4",
   "description": "C struct simulator",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "node dist/test.js",
     "watch:js": "nodemon dist/test.js",

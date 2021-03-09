@@ -43,7 +43,6 @@ export const struct = (
 				Buffer.concat(bufferList);
 		}
 		[inspect.custom](depth: number, opts: Object): string {
-			//console.log('Inspect depth: %i', depth);
 			const indent = depth - 2 ? '  '.repeat(depth) : '';
 			let repr: string = indent +
 				`struct[${structNameColor(this.name)}] {\n`;
@@ -80,7 +79,6 @@ export const struct = (
 				buffer = buffer.slice(offset+2, buffer.readUInt16LE(offset));
 				offset = 0;
 			}
-			console.log("New buffer = %o", buffer);
 			const structArgs: BinaryCompat[] = [];
 			for(const [name, type, size] of props) {
 				const isString = type == DataType.string;
@@ -90,10 +88,8 @@ export const struct = (
 					offset += 2;
 					return size;
 				})();
-				console.log("Field '%s' has type '%s' and size %i", name, DataType[type], segmentSize);
 				structArgs.push(decoder[type](buffer, offset, segmentSize));
 				offset += segmentSize// + (isString && !size ? 2 : 0);
-				console.log("New offset = %i", offset);
 			}
 			return new this(...structArgs);
 		}

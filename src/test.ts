@@ -5,7 +5,7 @@ import assert from "assert";
 export const container = struct('container', [
 	["foo", DataType.i8],
 	["bar", DataType.u32],
-	["baz", DataType.f32],
+	["baz", DataType.f64],
 	["hello", DataType.string]
 ], {
 	sizePrefix: true

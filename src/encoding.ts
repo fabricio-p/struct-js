@@ -89,17 +89,16 @@ decoder[DataType.string] = (data, offset, size: number) =>
 
 const sizeof: number[] = [
 	0,
-	1 << 0,
-	1 << 0,
-	1 << 1,
-	1 << 1,
-	1 << 2,
-	1 << 2,
-        1 << 3,
-        1 << 3,
-	1 << 2,
-        1 << 3
+	1 << 0, // u8
+	1 << 0, // i8
+	1 << 1, // u16
+	1 << 1, // i16
+	1 << 2, // u32
+	1 << 2, // i32
+        1 << 3, // u64
+        1 << 3, // i64
+	1 << 2, // f32 (aka. float)
+        1 << 3  // f64 (aka. double)
 ]
-//for(let i = 1, o = 1; i <= 8; i++ && o += 2)
 
 export {encoder, decoder, sizeof};
