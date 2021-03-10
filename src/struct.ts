@@ -10,25 +10,25 @@ export const struct = (
 	props: StructProp[],
 	options: StructOptions = <StructOptions>{}): Class<BinaryCompat> =>
 	class implements Struct {
-		types: StructProp[];
+		fields: StructProp[];
 		data: Struct["data"] = {};
 		readonly name: string;
 		settings: StructOptions;
 		constructor(...args: any[]) {
 			for(let i in props)
 				this.data[props[i][0]] = args[i];
-			this.types = props;
+			this.fields = props;
 			this.name = name;
-			Object.freeze(this.types);
-			this.types.forEach(Object.freeze);
+			Object.freeze(this.fields);
+			this.fields.forEach(Object.freeze);
 			Object.seal(this.data);
 			this.settings = Object.freeze({...options});
 			Object.freeze(this);
 		}
 		encode(): Buffer {
 			let bufferList: Buffer[] = [];
-			for(let i in this.types) {
-				const [name, type, size] = this.types[i];
+			for(let i in this.fields) {
+				const [name, type, size] = this.fields[i];
 				const encoded = encoder[type](this.data[name], size);
 				bufferList.push(encoded);
 			}
@@ -46,7 +46,7 @@ export const struct = (
 			const indent = depth - 2 ? '  '.repeat(depth) : '';
 			let repr: string = indent +
 				`struct[${structNameColor(this.name)}] {\n`;
-			for(let [name, type] of this.types) {
+			for(let [name, type] of this.fields) {
 				const dataRepr = inspect(this.data[name], {
 						      depth,
 						      colors: true,
@@ -63,7 +63,7 @@ export const struct = (
 			repr.type = "Struct";
 			repr.name = this.name;
 			repr.data = [];
-			for(let [name, type, size] of this.types) {
+			for(let [name, type, size] of this.fields) {
 				const data: PropDescriptor = [
 					DataType[type],
 					this.data[name]

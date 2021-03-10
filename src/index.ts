@@ -1,3 +1,4 @@
 export * from "./struct";
-export * from "./data-type";
+import DataType from "./data-type";
 export * from "./encoding";
+export {DataType};

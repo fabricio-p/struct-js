@@ -18,4 +18,4 @@ enum DataType {
 	f32_array,
 	f64_array
 }
-export default DataType;
+export = DataType;

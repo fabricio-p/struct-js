@@ -12,7 +12,7 @@ interface Struct {
 	data: {
 		[key: string]: BinaryCompat;
 	};
-	types: StructProp[];
+	fields: StructProp[];
 	encode(): Buffer;
 }
 interface StructClass extends Function {
