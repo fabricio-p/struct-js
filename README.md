@@ -9,9 +9,9 @@ It is pretty simple to use this package. It exposes a `struct` function
 wich takes 3 arguments.
 1. The struct's name.
 2. An array of struct fields. A field is just an array that
-is like `[fieldName: string, fieldType: DataType[number], fieldSize?: number]` or
-an object like
-```
+  is like `[fieldName: string, fieldType: DataType[number], fieldSize?: number]` or
+  an object like
+  ```
 {
 	name: [fieldName: string],
 	type: [fieldType: DataType[number]|<returnof struct>],
@@ -19,8 +19,8 @@ an object like
 	default?: [defaultValue: {type}|() => {type}]
 }
 ```
-If the default is a function, it will be called to generate a default value.
-The object version is a more readable approach that lets you use default values.
+  If the default is a function, it will be called to generate a default value.
+  The object version is a more readable approach that lets you use default values.<br/>
 3. (optional) The struct's options
 
 The `struct` function is a class factory. It returns a class depending of the
@@ -28,7 +28,7 @@ paremeters that you provide. The class constructor takes 2 arguments
 1. An array of values to be assigned to fields by order.
 2. An array to assign values by name using descriptor objects.
 A simple example:
-```
+```javascript
 const { struct, DataType, sizeof } = require("struct-js");
 const Person = struct('person', [
 	{
@@ -55,7 +55,7 @@ const someone = new Person([
 /*
  * struct[person] {
  *   id: u16 = 24344,
- *   name: atring = "Ben",
+ *   name: string = "Ben",
  *   age: u8 = 25,
  *   country: string = "Albania"
  * }
