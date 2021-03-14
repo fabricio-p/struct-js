@@ -10,15 +10,15 @@ wich takes 3 arguments.
 1. The struct's name.
 2. An array of struct fields. A field is just an array that
   is like `[fieldName: string, fieldType: DataType[number], fieldSize?: number]` or
-  an object like
+  an object like (__not implemented__)
   ```
-{
-	name: [fieldName: string],
-	type: [fieldType: DataType[number]|<returnof struct>],
-	size?: [fieldSize: number],
-	default?: [defaultValue: {type}|() => {type}]
-}
-```
+  {
+	  name: [fieldName: string],
+	  type: [fieldType: DataType[number]|<returnof struct>],
+	  size?: [fieldSize: number],
+	  default?: [defaultValue: {type}|() => {type}]
+  }
+  ```
   If the default is a function, it will be called to generate a default value.
   The object version is a more readable approach that lets you use default values.<br/>
 3. (optional) The struct's options
@@ -26,7 +26,7 @@ wich takes 3 arguments.
 The `struct` function is a class factory. It returns a class depending of the
 paremeters that you provide. The class constructor takes 2 arguments
 1. An array of values to be assigned to fields by order.
-2. An array to assign values by name using descriptor objects.
+2. (__not implemented__) An array to assign values by name using descriptor objects.
 A simple example:
 ```javascript
 const { struct, DataType, sizeof } = require("struct-js");
