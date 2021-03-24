@@ -14,7 +14,7 @@ export const struct = (
 		data: Struct["data"] = {};
 		readonly name: string;
 		settings: StructOptions;
-		constructor(...args: any[]) {
+		constructor(args: any[]) {
 			for(let i in props)
 				this.data[props[i][0]] = args[i];
 			this.fields = props;
