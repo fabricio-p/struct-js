@@ -1,10 +1,24 @@
-type StructProp = [string, number, number?];
-type PropDescriptor = [string, BinaryCompat, number?];
+type StructField = {
+	name: string,
+	type: number,
+	size?: number,
+	default?: BinaryCompat | (() => BinaryCompat)
+};
+type FieldDescriptor = {
+	name: string,
+	value: BinaryCompat
+};
 type JSONStruct = {
 	type: string;
 	name: string;
-	data: PropDescriptor[]
-}
+	data: Array<JSONStructField>;
+};
+type JSONStructField = {
+	type: string,
+	name: string,
+	value: BinaryCompat,
+	size?: number
+};
 type StructOptions = {
 	sizePrefix: boolean;
-}
+};

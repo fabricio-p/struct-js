@@ -1,4 +1,4 @@
-interface Class<T> extends Function {
-	new(...args: T[]): Struct;
+interface Class<T, K> extends Function {
+	new(orderedFields: T[], namedFields?: K[]): Struct;
 	decode(buffer: Buffer, offset?: number): Struct;
 }

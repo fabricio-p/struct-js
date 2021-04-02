@@ -8,9 +8,7 @@ memory (I'm making a language that compiles to it).
 It is pretty simple to use this package. It exposes a `struct` function
 wich takes 3 arguments.
 1. The struct's name.
-2. An array of struct fields. A field is just an array that
-  is like `[fieldName: string, fieldType: DataType[number], fieldSize?: number]` or
-  an object like (__not implemented__)
+2. An array of struct fields. A field is just an object like
   ```
   {
 	  name: [fieldName: string],
@@ -20,13 +18,12 @@ wich takes 3 arguments.
   }
   ```
   If the default is a function, it will be called to generate a default value.
-  The object version is a more readable approach that lets you use default values.<br/>
 3. (optional) The struct's options
 
 The `struct` function is a class factory. It returns a class depending of the
 paremeters that you provide. The class constructor takes 2 arguments
 1. An array of values to be assigned to fields by order.
-2. (__not implemented__) An array to assign values by name using descriptor objects.
+2. An array to assign values by name using descriptor objects.
 A simple example:
 ```javascript
 const { struct, DataType, sizeof } = require("struct-js");
@@ -36,13 +33,23 @@ const Person = struct('person', [
 		type: DataType.u16,
 		default: () => Math.floor(Math.random() * sizeof[DataType.u16])
 	},
-	["name", DataType.string],
-	["age", DataType.u8],
-	["country", DataType.string],
+	{
+		name: "name",
+		type: DataType.string
+	},
+	{
+		name: "age",
+		type: DataType.u8
+	},
+	{
+		name: "country",
+		type: DataType.string
+	},
 ], {
 	sizePrefix: false
 });
 const someone = new Person([
+	null,
 	"Ben",
 	25,
 	"Albania"

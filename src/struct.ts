@@ -7,28 +7,41 @@ const structNameColor = chalk.rgb(0x00, 0xbf, 0xce);
 
 export const struct = (
 	name: string,
-	props: StructProp[],
-	options: StructOptions = <StructOptions>{}): Class<BinaryCompat> =>
+	props: StructField[],
+	options: StructOptions = <StructOptions>{}): Class<BinaryCompat, FieldDescriptor> =>
 	class implements Struct {
-		fields: StructProp[];
+		fields: StructField[];
 		data: Struct["data"] = {};
 		readonly name: string;
 		settings: StructOptions;
-		constructor(args: any[]) {
-			for(let i in props)
-				this.data[props[i][0]] = args[i];
+		constructor(
+			orderedFields: BinaryCompat[],
+			namedFields: FieldDescriptor[] = []) {
+			for(const i in props) {
+				const field = props[i];
+				if(orderedFields[i] === undefined)
+					typeof field.default == "function" ?
+					this.data[field.name] = field.default() :
+					(typeof field.default == "undefined" ?
+					undefinedError(props, orderedFields, Number(i)) :
+					this.data[field.name] = field.default);
+				
+				this.data[field.name] = orderedFields[i];
+			}
 			this.fields = props;
 			this.name = name;
 			Object.freeze(this.fields);
 			this.fields.forEach(Object.freeze);
 			Object.seal(this.data);
+			for(const descriptor of namedFields)
+				this.data[descriptor.name] = descriptor.value;
 			this.settings = Object.freeze({...options});
 			Object.freeze(this);
 		}
 		encode(): Buffer {
 			let bufferList: Buffer[] = [];
 			for(let i in this.fields) {
-				const [name, type, size] = this.fields[i];
+				const {name, type, size} = this.fields[i];
 				const encoded = encoder[type](this.data[name], size);
 				bufferList.push(encoded);
 			}
@@ -46,7 +59,7 @@ export const struct = (
 			const indent = depth - 2 ? '  '.repeat(depth) : '';
 			let repr: string = indent +
 				`struct[${structNameColor(this.name)}] {\n`;
-			for(let [name, type] of this.fields) {
+			for(let {name, type} of this.fields) {
 				const dataRepr = inspect(this.data[name], {
 						      depth,
 						      colors: true,
@@ -63,13 +76,13 @@ export const struct = (
 			repr.type = "Struct";
 			repr.name = this.name;
 			repr.data = [];
-			for(let [name, type, size] of this.fields) {
-				const data: PropDescriptor = [
-					DataType[type],
-					this.data[name]
-				];
-				if(size)
-					data.push(size)
+			for(let {name, type, size} of this.fields) {
+				const data: JSONStructField = {
+					name,
+					type: DataType[type],
+					value: this.data[name],
+					size
+				};
 				repr.data.push(data);
 			}
 			return repr;
@@ -80,7 +93,7 @@ export const struct = (
 				offset = 0;
 			}
 			const structArgs: BinaryCompat[] = [];
-			for(const [name, type, size] of props) {
+			for(const {name, type, size} of props) {
 				const isString = type == DataType.string;
 				const segmentSize = size || sizeof[type] ||
 					(() => {
@@ -89,8 +102,12 @@ export const struct = (
 					return size;
 				})();
 				structArgs.push(decoder[type](buffer, offset, segmentSize));
-				offset += segmentSize// + (isString && !size ? 2 : 0);
+				offset += segmentSize;
 			}
-			return new this(...structArgs);
+			return new this(structArgs);
 		}
 	}
+
+function undefinedError(fiels: StructField[], values: BinaryCompat[], index: number): never {
+	throw new TypeError(``);
+}
