@@ -1,8 +1,8 @@
 {
   "name": "struct-js",
-  "version": "0.7.6",
+  "version": "0.8.8",
   "description": "C-like struct simulator",
-  "license": "ISC",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "node dist/test.js",
@@ -16,14 +16,11 @@
   },
   "keywords": [],
   "author": "Fabricio Pashaj <fabriciopashaj.dev@gmail.com>",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fabriciopashaj/struct-js/issues"
   },
   "homepage": "https://github.com/fabriciopashaj/struct-js#readme",
-  "dependencies": {
-    "chalk": "^4.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^14.14.37",
     "nodemon": "^2.0.7",

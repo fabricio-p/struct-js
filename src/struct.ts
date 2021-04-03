@@ -1,9 +1,8 @@
 import {encoder, decoder, sizeof} from "./encoding";
 import {inspect} from "util";
 import DataType from "./data-type";
-import chalk from "chalk";
-const typeColor = chalk.hex("CE45DD");
-const structNameColor = chalk.rgb(0x00, 0xbf, 0xce);
+const typeColor = value => `\x1B[38;2;206;69;221m${value}\x1B[39m`;
+const structNameColor = value => `\x1B[38;2;0;191;206m${value}\x1B[39m`;
 
 export const struct = (
 	name: string,
